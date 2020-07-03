@@ -8,7 +8,7 @@ import java.io.FileWriter;
  * This program formats SFDC Logs
  * 
  * @author Maciej Szymczak
- * @version 2020.07.03
+ * @version 2020.07.02
  */
 
 public class SalesforceLogFormatter {
