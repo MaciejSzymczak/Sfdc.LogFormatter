@@ -31,9 +31,10 @@ public class SalesforceLogFormatter {
 				if (phisicalLine.contains("|"))
 					phisicalLine = phisicalLine.substring(phisicalLine.indexOf("|")+1, phisicalLine.length());
 				//indentation
-				if (phisicalLine.contains("CODE_UNIT_STARTED|") || phisicalLine.contains("DML_BEGIN|") ) {
+				if (phisicalLine.contains("CODE_UNIT_STARTED|") || phisicalLine.contains("DML_BEGIN|") || phisicalLine.contains("METHOD_ENTRY") ) {
 					phisicalLine = phisicalLine.replace("CODE_UNIT_STARTED|", "{CODE_UNIT_STARTED|");
 					phisicalLine = phisicalLine.replace("DML_BEGIN|", "{DML_BEGIN|");
+					phisicalLine = phisicalLine.replace("METHOD_ENTRY|", "{METHOD_ENTRY|");
 			    	indent = indent + "  ";
 				}
 				//set ***IMPORTANT*** 
@@ -41,6 +42,12 @@ public class SalesforceLogFormatter {
 			     || phisicalLine.contains("trigger event") //trigger started
 			     || phisicalLine.contains("WF_CRITERIA_BEGIN") //Workflow or process builder started	
 			     || phisicalLine.contains("FLOW_CREATE_INTERVIEW") // process builder started	
+			     || phisicalLine.contains("EXCEPTION_THROWN") 	
+			     || phisicalLine.contains("FATAL_ERROR") 	
+			     || phisicalLine.contains("METHOD_ENTRY") 	
+			     || phisicalLine.contains("METHOD_EXIT") 	
+			     
+			     
 						) {
 					phisicalLine = "***IMPORTANT*** " + phisicalLine;
 				}				
@@ -50,7 +57,7 @@ public class SalesforceLogFormatter {
 								) {
 							phisicalLine = "***IMPORTANT*** FIELD_UPDATE-reexecutes triggers! " + phisicalLine;
 						}				
-			    if (phisicalLine.contains("CODE_UNIT_FINISHED|") || phisicalLine.contains("DML_END|")) {
+			    if (phisicalLine.contains("CODE_UNIT_FINISHED|") || phisicalLine.contains("DML_END|") || phisicalLine.contains("METHOD_EXIT|")) {
 					phisicalLine = phisicalLine + "}";
 			    }
 			    
@@ -66,7 +73,7 @@ public class SalesforceLogFormatter {
 			    }
 			    	
 			    //revert indentation
-			    if (phisicalLine.contains("CODE_UNIT_FINISHED|") || phisicalLine.contains("DML_END|")) {
+			    if (phisicalLine.contains("CODE_UNIT_FINISHED|") || phisicalLine.contains("DML_END|")|| phisicalLine.contains("METHOD_EXIT|")) {
 			    	indent = indent.substring(0, indent.length()-2);			    	
 			    }
 			}
