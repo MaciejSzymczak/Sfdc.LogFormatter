@@ -45,9 +45,8 @@ public class SalesforceLogFormatter {
 			     || phisicalLine.contains("EXCEPTION_THROWN") 	
 			     || phisicalLine.contains("FATAL_ERROR") 	
 			     || phisicalLine.contains("METHOD_ENTRY") 	
-			     || phisicalLine.contains("METHOD_EXIT") 	
-			     
-			     
+			     || phisicalLine.contains("METHOD_EXIT")
+			     || phisicalLine.contains("Maximum CPU time")
 						) {
 					phisicalLine = "***IMPORTANT*** " + phisicalLine;
 				}				
