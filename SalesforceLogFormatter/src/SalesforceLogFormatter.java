@@ -8,7 +8,7 @@ import java.io.FileWriter;
  * This program formats SFDC Logs
  * 
  * @author Maciej Szymczak
- * @version 2020.09.18
+ * @version 2024.01.22
  */
 
 public class SalesforceLogFormatter {
@@ -28,8 +28,10 @@ public class SalesforceLogFormatter {
 				phisicalLine = phisicalLine.replace("{", "((");
 				phisicalLine = phisicalLine.replace("}", "))");
 			    //remove timestamp
-				if (phisicalLine.contains("|"))
-					phisicalLine = phisicalLine.substring(phisicalLine.indexOf("|")+1, phisicalLine.length());
+				if (phisicalLine.contains("|")) {
+					phisicalLine = phisicalLine.substring(0,8) + " "+ phisicalLine.substring(phisicalLine.indexOf("|")+1, phisicalLine.length());
+					//phisicalLine = phisicalLine.substring(phisicalLine.indexOf("|")+1, phisicalLine.length());
+				} 
 				//indentation
 				if (phisicalLine.contains("CODE_UNIT_STARTED|") || phisicalLine.contains("DML_BEGIN|") || phisicalLine.contains("METHOD_ENTRY") ) {
 					phisicalLine = phisicalLine.replace("CODE_UNIT_STARTED|", "{CODE_UNIT_STARTED|");
@@ -38,7 +40,7 @@ public class SalesforceLogFormatter {
 			    	indent = indent + "  ";
 				}
 				//set ***IMPORTANT*** 
-				if (phisicalLine.contains("USER_DEBUG|") 
+				if ((phisicalLine.contains("USER_DEBUG|") 
 			     || phisicalLine.contains("trigger event") //trigger started
 			     || phisicalLine.contains("WF_CRITERIA_BEGIN") //Workflow or process builder started	
 			     || phisicalLine.contains("FLOW_CREATE_INTERVIEW") // process builder started	
@@ -47,7 +49,10 @@ public class SalesforceLogFormatter {
 			     || phisicalLine.contains("METHOD_ENTRY") 	
 			     || phisicalLine.contains("METHOD_EXIT")
 			     || phisicalLine.contains("Maximum CPU time")
-						) {
+						)
+				&& !phisicalLine.contains("0 out of ")
+				)
+				{
 					phisicalLine = "***IMPORTANT*** " + phisicalLine;
 				}				
 				if (phisicalLine.contains("DML_BEGIN|")  //field update: trigger (or apex block):      RecordId: NO  Field name: NO   New value: NO   Old value: NO
